@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: oklch(98% 0 0);
+  --color-fg: oklch(17% 0.02 0);
+  --color-bg-muted: oklch(97% 0.01 0);
+  --color-surface: oklch(100% 0 0);
+  --color-border: oklch(92% 0.01 0);
+  --color-fg-muted: oklch(48% 0.02 0);
+  --color-accent: oklch(62% 0.18 254);
+  --color-accent-500: oklch(62% 0.18 254);
+  --color-accent-600: oklch(56% 0.18 254);
+  --color-positive: oklch(60% 0.13 150);
+  --color-negative: oklch(55% 0.17 30);
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-bg: oklch(17% 0 0);
+    --color-fg: oklch(96% 0 0);
+    --color-bg-muted: oklch(23% 0.01 0);
+    --color-surface: oklch(21% 0.01 0);
+    --color-border: oklch(28% 0.02 0);
+    --color-fg-muted: oklch(72% 0.02 0);
+    --color-accent: oklch(65% 0.19 254);
+    --color-accent-500: oklch(65% 0.19 254);
+    --color-accent-600: oklch(70% 0.20 254);
+    --color-positive: oklch(78% 0.11 150);
+    --color-negative: oklch(72% 0.16 30);
+  }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-[--color-bg] text-[--color-fg];
+}
+
+.container {
+  @apply max-w-5xl mx-auto px-4;
+}
+
+.card {
+  @apply rounded-xl border border-[--color-border] bg-[--color-surface] p-5 shadow-sm;
+}
+
+.btn {
+  @apply inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-colors;
+}
+.btn-primary {
+  @apply bg-[--color-accent] text-white border-[--color-accent] hover:bg-[--color-accent-600];
+}
+.btn-ghost {
+  @apply border-transparent hover:bg-[--color-bg-muted];
+}
+
+.input {
+  @apply w-full mt-1 rounded-lg border border-[--color-border] bg-[--color-surface] p-2.5 outline-none focus:ring-2 focus:ring-[--color-accent] transition;
+}
+
+.label {
+  @apply block text-sm font-medium mb-1;
+}
+
+.helper {
+  @apply text-xs text-[--color-fg-muted] mt-1;
+}
+
+.section-title {
+  @apply text-lg font-semibold mb-2;
+}
+
+.stat {
+  @apply rounded-xl border border-[--color-border] bg-[--color-surface] p-4;
+}
+.stat-label {
+  @apply text-xs uppercase tracking-wide text-[--color-fg-muted];
+}
+.stat-value {
+  @apply text-2xl font-semibold;
+}
+.stat-positive { @apply text-[--color-positive]; }
+.stat-negative { @apply text-[--color-negative]; }
