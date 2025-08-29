@@ -11,7 +11,7 @@ function formatCurrency(value: number): string {
   }).format(value)
 }
 
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({ active, payload, label, isDark }: any) {
   if (!active || !payload?.length) return null
   
   const contributed = payload.find((p: any) => p.dataKey === 'contributed')?.value || 0
@@ -23,20 +23,20 @@ function CustomTooltip({ active, payload, label }: any) {
   const inflationGainPercent = contributed > 0 ? ((inflationGain / contributed) * 100).toFixed(1) : '0.0'
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white/98 backdrop-blur-md p-4 shadow-xl border-l-4 border-l-green-500">
-      <div className="text-xs text-gray-600 font-bold mb-3 uppercase tracking-wide">{label}</div>
+    <div className={`${isDark ? 'border border-slate-700 bg-slate-900/95' : 'border border-gray-200 bg-white/98'} rounded-xl backdrop-blur-md p-4 shadow-xl border-l-4 border-l-green-500`}>
+      <div className={`text-xs font-bold mb-3 uppercase tracking-wide ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{label}</div>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-sm text-gray-800 font-medium">Versato:</span>
+            <span className={`text-sm font-medium ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>Versato:</span>
           </div>
           <span className="font-bold text-blue-600">{formatCurrency(contributed)}</span>
         </div>
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-sm text-gray-800 font-medium">Stimato:</span>
+            <span className={`text-sm font-medium ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>Stimato:</span>
           </div>
           <span className="font-bold text-green-600">{formatCurrency(estimated)}</span>
         </div>
@@ -44,21 +44,21 @@ function CustomTooltip({ active, payload, label }: any) {
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-              <span className="text-sm text-gray-800 font-medium">Potere d'acquisto:</span>
+              <span className={`text-sm font-medium ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>Potere d'acquisto:</span>
             </div>
             <span className="font-bold text-orange-600">{formatCurrency(inflationAdjusted)}</span>
           </div>
         )}
-        <div className="border-t border-gray-200 pt-2 mt-2">
+        <div className={`${isDark ? 'border-t border-slate-700' : 'border-t border-gray-200'} pt-2 mt-2`}>
           <div className="flex items-center justify-between gap-6">
-            <span className="text-sm text-gray-800 font-semibold">💰 Guadagno nominale:</span>
+            <span className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>💰 Guadagno nominale:</span>
             <span className={`font-bold ${gain >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {formatCurrency(gain)} ({gain >= 0 ? '+' : ''}{gainPercent}%)
             </span>
           </div>
           {inflationAdjusted > 0 && (
             <div className="flex items-center justify-between gap-6 mt-1">
-              <span className="text-sm text-gray-800 font-semibold">🔥 Guadagno reale:</span>
+              <span className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>🔥 Guadagno reale:</span>
               <span className={`font-bold ${inflationGain >= 0 ? 'text-orange-600' : 'text-red-600'}`}>
                 {formatCurrency(inflationGain)} ({inflationGain >= 0 ? '+' : ''}{inflationGainPercent}%)
               </span>
@@ -107,6 +107,9 @@ function Toggle({ checked, onChange, label }: ToggleProps) {
 export function PacChart() {
   const { result, input } = usePacStore()
   const [showGross, setShowGross] = useState(false)
+  const isDark = typeof document !== 'undefined'
+    ? (document.documentElement.classList.contains('dark') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches))
+    : false
   
   // Memoize chart data to avoid recalculation on every render
   const data = useMemo(() => {
@@ -159,38 +162,38 @@ export function PacChart() {
       </div>
 
       {/* Chart Container */}
-      <div className="bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10 rounded-lg p-4">
+      <div className="bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-slate-800/60 dark:to-slate-800/30 rounded-lg p-4">
         <div style={{ width: '100%', height: 400 }}>
           <ResponsiveContainer>
             <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <defs>
                 <linearGradient id="fillEstimated" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity={0.4} />
-                  <stop offset="50%" stopColor="#10b981" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#10b981" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#10b981" stopOpacity={isDark ? 0.6 : 0.4} />
+                  <stop offset="50%" stopColor="#10b981" stopOpacity={isDark ? 0.35 : 0.2} />
+                  <stop offset="100%" stopColor="#10b981" stopOpacity={isDark ? 0.15 : 0.05} />
                 </linearGradient>
                 <linearGradient id="fillContributed" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.3} />
-                  <stop offset="50%" stopColor="#3b82f6" stopOpacity={0.15} />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity={isDark ? 0.45 : 0.3} />
+                  <stop offset="50%" stopColor="#3b82f6" stopOpacity={isDark ? 0.25 : 0.15} />
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity={isDark ? 0.12 : 0.05} />
                 </linearGradient>
                 <linearGradient id="fillInflation" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.2} />
-                  <stop offset="50%" stopColor="#f59e0b" stopOpacity={0.1} />
-                  <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.03} />
+                  <stop offset="0%" stopColor="#f59e0b" stopOpacity={isDark ? 0.35 : 0.2} />
+                  <stop offset="50%" stopColor="#f59e0b" stopOpacity={isDark ? 0.2 : 0.1} />
+                  <stop offset="100%" stopColor="#f59e0b" stopOpacity={isDark ? 0.1 : 0.03} />
                 </linearGradient>
               </defs>
               
               <CartesianGrid 
                 strokeDasharray="3 3" 
-                stroke="#e2e8f0" 
-                strokeOpacity={0.5}
+                stroke={isDark ? '#334155' : '#e2e8f0'} 
+                strokeOpacity={isDark ? 0.9 : 0.5}
               />
               
               <XAxis 
                 dataKey="date" 
                 minTickGap={30}
-                stroke="#64748b"
+                stroke={isDark ? '#cbd5e1' : '#64748b'}
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
@@ -198,19 +201,20 @@ export function PacChart() {
               
               <YAxis 
                 tickFormatter={(v) => formatCurrency(v as number)}
-                stroke="#64748b"
+                stroke={isDark ? '#cbd5e1' : '#64748b'}
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
               />
               
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<CustomTooltip isDark={isDark} />} />
               
               <Legend 
                 wrapperStyle={{ 
                   paddingTop: '20px',
                   fontSize: '14px',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  color: isDark ? '#e2e8f0' : '#0f172a'
                 }}
                 iconType="line"
               />
@@ -221,9 +225,9 @@ export function PacChart() {
                 name={`Capitale stimato (${showGross ? 'lordo' : 'netto'})`}
                 stroke="#10b981" 
                 fill="url(#fillEstimated)" 
-                strokeWidth={2}
+                strokeWidth={isDark ? 3 : 2}
                 dot={false}
-                fillOpacity={0.1}
+                fillOpacity={isDark ? 0.2 : 0.1}
               />
               
               <Line 
@@ -231,7 +235,7 @@ export function PacChart() {
                 dataKey="contributed" 
                 name="Capitale versato" 
                 stroke="#3b82f6" 
-                strokeWidth={2}
+                strokeWidth={isDark ? 3 : 2}
                 dot={false}
                 strokeDasharray="6 3"
               />
@@ -241,7 +245,7 @@ export function PacChart() {
                 dataKey={showGross ? 'estimatedGross' : 'estimatedNet'} 
                 name={`Capitale stimato (${showGross ? 'lordo' : 'netto'})`}
                 stroke="#10b981" 
-                strokeWidth={2}
+                strokeWidth={isDark ? 3 : 2}
                 dot={false}
               />
 
@@ -251,7 +255,7 @@ export function PacChart() {
                   dataKey="inflationAdjusted" 
                   name="🔥 Potere d'acquisto reale" 
                   stroke="#f59e0b" 
-                  strokeWidth={2}
+                  strokeWidth={isDark ? 3 : 2}
                   dot={false}
                   strokeDasharray="8 3"
                 />
@@ -260,9 +264,9 @@ export function PacChart() {
               <Brush 
                 dataKey="date" 
                 height={30} 
-                stroke="#667eea" 
+                stroke={isDark ? '#94a3b8' : '#667eea'} 
                 strokeWidth={2}
-                fill="#f1f5f9"
+                fill={isDark ? '#0f172a' : '#f1f5f9'}
                 travellerWidth={10}
               />
             </LineChart>
