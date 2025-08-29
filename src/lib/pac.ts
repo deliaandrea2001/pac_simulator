@@ -25,7 +25,14 @@ export function simulatePac(input: PacInput, startDate = new Date()): PacResult 
   const monthlyReturn = getMonthlyReturnRate(input.annualReturnRatePct)
   const monthlyFee = getMonthlyFeeRate(input.annualFeePct)
   const monthlyInflation = getMonthlyInflationRate(input.inflationRatePct)
-  const contributionInterval = input.frequency === 'monthly' ? 1 : 3
+  // Contribution interval in months: monthly=1, biweekly≈0.5 months (26/12), quarterly=3
+  // We approximate biweekly as 26 contributions/year => every ~0.4615 months. We'll
+  // implement this by counting contributions based on an accumulated month fraction.
+  const isQuarterly = input.frequency === 'quarterly'
+  const isMonthly = input.frequency === 'monthly'
+
+  const contributionIntervalMonths = isMonthly ? 1 : isQuarterly ? 3 : 12 / 26
+
 
   const points: PacPoint[] = []
 
@@ -34,9 +41,16 @@ export function simulatePac(input: PacInput, startDate = new Date()): PacResult 
   let totalContributed = input.initialCapital
   let inflationFactor = 1 // Fattore cumulativo di inflazione
 
+  let monthsSinceLastContribution = 0
   for (let m = 0; m < input.durationMonths; m += 1) {
-    const isContributionMonth = m % contributionInterval === 0
-    const contribution = isContributionMonth ? input.periodicContribution : 0
+    monthsSinceLastContribution += 1
+    let contribution = 0
+    if (monthsSinceLastContribution >= contributionIntervalMonths - 1e-9) {
+      contribution = input.periodicContribution
+      // Reduce by exact interval; if interval < 1 we keep the remainder fractional part
+      monthsSinceLastContribution -= contributionIntervalMonths
+      if (monthsSinceLastContribution < 0) monthsSinceLastContribution = 0
+    }
 
     // Apply contribution at the start of the month
     valueGross += contribution

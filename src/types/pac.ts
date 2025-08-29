@@ -1,4 +1,4 @@
-export type ContributionFrequency = 'monthly' | 'quarterly'
+export type ContributionFrequency = 'monthly' | 'biweekly' | 'quarterly'
 
 export interface PacInput {
   periodicContribution: number

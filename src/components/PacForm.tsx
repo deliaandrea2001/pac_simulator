@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 const schema = z.object({
   periodicContribution: z.number().min(0),
-  frequency: z.enum(['monthly', 'quarterly']),
+  frequency: z.enum(['monthly', 'biweekly', 'quarterly']),
   durationMonths: z.number().int().min(1),
   initialCapital: z.number().min(0),
   annualReturnRatePct: z.number().min(-100).max(100),
@@ -68,7 +68,8 @@ export function PacForm() {
   }
 
   function handleFrequency(e: ChangeEvent<HTMLSelectElement>) {
-    const value = e.target.value === 'quarterly' ? 'quarterly' : 'monthly'
+    const raw = e.target.value
+    const value = raw === 'quarterly' ? 'quarterly' : raw === 'biweekly' ? 'biweekly' : 'monthly'
     setInput({ frequency: value })
   }
 
@@ -137,6 +138,7 @@ export function PacForm() {
             <label className="label">Frequenza di versamento</label>
             <select className="input" value={input.frequency} onChange={handleFrequency}>
               <option value="monthly">📅 Mensile</option>
+              <option value="biweekly">📅 Ogni due settimane</option>
               <option value="quarterly">📅 Trimestrale</option>
             </select>
           </div>
