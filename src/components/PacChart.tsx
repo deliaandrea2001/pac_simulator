@@ -26,6 +26,12 @@ function CustomTooltip({ active, payload, label, isDark }: any) {
     <div className={`${isDark ? 'border border-slate-700 bg-slate-900/95' : 'border border-gray-200 bg-white/98'} rounded-xl backdrop-blur-md p-4 shadow-xl border-l-4 border-l-green-500`}>
       <div className={`text-xs font-bold mb-3 uppercase tracking-wide ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{label}</div>
       <div className="space-y-2">
+        {payload[0]?.payload?.ageYears !== undefined && (
+          <div className="flex items-center justify-between gap-6">
+            <span className={`text-sm font-medium ${isDark ? 'text-slate-100' : 'text-gray-800'}`}>Età:</span>
+            <span className={`font-bold ${isDark ? 'text-slate-100' : 'text-gray-900'}`}>{payload[0].payload.ageYears} anni</span>
+          </div>
+        )}
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
@@ -115,6 +121,7 @@ export function PacChart() {
   const data = useMemo(() => {
     const chartData = result.points.map((p) => ({
       date: p.dateLabel,
+      ageYears: p.ageYears,
       contributed: Math.round(p.totalContributed * 100) / 100,
       estimatedNet: Math.round(p.estimatedValueNet * 100) / 100,
       estimatedGross: Math.round(p.estimatedValueGross * 100) / 100,

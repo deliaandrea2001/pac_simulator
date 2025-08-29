@@ -45,7 +45,8 @@ export function simulatePac(input: PacInput, startDate = new Date()): PacResult 
   for (let m = 0; m < input.durationMonths; m += 1) {
     monthsSinceLastContribution += 1
     let contribution = 0
-    if (monthsSinceLastContribution >= contributionIntervalMonths - 1e-9) {
+    const contributionsAllowed = typeof input.contributionDurationMonths === 'number' ? (m < input.contributionDurationMonths) : true
+    if (contributionsAllowed && monthsSinceLastContribution >= contributionIntervalMonths - 1e-9) {
       contribution = input.periodicContribution
       // Reduce by exact interval; if interval < 1 we keep the remainder fractional part
       monthsSinceLastContribution -= contributionIntervalMonths
@@ -73,6 +74,7 @@ export function simulatePac(input: PacInput, startDate = new Date()): PacResult 
     points.push({
       monthIndex: m + 1,
       dateLabel: formatMonthLabel(startDate, m + 1),
+      ageYears: (typeof input.startAgeYears === 'number' ? input.startAgeYears : 0) + Math.floor((m + 1) / 12),
       contribution,
       totalContributed,
       estimatedValueGross: valueGross,

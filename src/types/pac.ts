@@ -4,7 +4,9 @@ export interface PacInput {
   periodicContribution: number
   frequency: ContributionFrequency
   durationMonths: number
+  contributionDurationMonths: number
   initialCapital: number
+  startAgeYears: number
   annualReturnRatePct: number
   annualFeePct: number
   inflationRatePct: number
@@ -14,6 +16,7 @@ export interface PacInput {
 export interface PacPoint {
   monthIndex: number
   dateLabel: string
+  ageYears: number
   contribution: number
   totalContributed: number
   estimatedValueGross: number

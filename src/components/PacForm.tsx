@@ -8,7 +8,9 @@ const schema = z.object({
   periodicContribution: z.number().min(0),
   frequency: z.enum(['monthly', 'biweekly', 'quarterly']),
   durationMonths: z.number().int().min(1),
+  contributionDurationMonths: z.number().int().min(1),
   initialCapital: z.number().min(0),
+  startAgeYears: z.number().int().min(0).max(120),
   annualReturnRatePct: z.number().min(-100).max(100),
   annualFeePct: z.number().min(0).max(100),
   inflationRatePct: z.number().min(0).max(50),
@@ -84,7 +86,9 @@ export function PacForm() {
       periodicContribution: 100,
       frequency: 'monthly',
       durationMonths: 120,
+      contributionDurationMonths: 120,
       initialCapital: 0,
+      startAgeYears: 30,
       annualReturnRatePct: 5,
       annualFeePct: 1,
       inflationRatePct: 2,
@@ -141,6 +145,40 @@ export function PacForm() {
               <option value="monthly">📅 Mensile</option>
               <option value="quarterly">📅 Trimestrale</option>
             </select>
+          </div>
+        </div>
+
+        {/* Contribution Stop and Age */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <label className="label flex items-center gap-2">
+              Età iniziale
+              <HelpIcon tooltip="La tua età di partenza: usata per mostrare l'età lungo la timeline" />
+            </label>
+            <input 
+              type="number" 
+              className="input" 
+              value={input.startAgeYears}
+              onChange={handleNumber('startAgeYears')}
+              min={0}
+              max={120}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="label flex items-center gap-2">
+              Interrompi versamenti dopo (mesi)
+              <HelpIcon tooltip="Durata in mesi in cui effettuerai i versamenti. Il calcolo continua anche dopo, senza ulteriori contributi." />
+            </label>
+            <input 
+              type="number" 
+              className="input" 
+              value={input.contributionDurationMonths}
+              onChange={handleNumber('contributionDurationMonths')}
+              min={1}
+              max={600}
+              step={12}
+            />
           </div>
         </div>
 
