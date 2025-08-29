@@ -17,6 +17,8 @@ const defaultInput: PacInput = {
   initialCapital: 0,
   annualReturnRatePct: 5,
   annualFeePct: 1,
+  inflationRatePct: 2,
+  showInflationAdjusted: false,
 }
 
 export const usePacStore = create<PacState>()(

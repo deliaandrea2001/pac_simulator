@@ -7,6 +7,8 @@ export interface PacInput {
   initialCapital: number
   annualReturnRatePct: number
   annualFeePct: number
+  inflationRatePct: number
+  showInflationAdjusted: boolean
 }
 
 export interface PacPoint {
@@ -16,16 +18,20 @@ export interface PacPoint {
   totalContributed: number
   estimatedValueGross: number
   estimatedValueNet: number
+  estimatedValueInflationAdjusted: number
 }
 
 export interface PacSummary {
   totalContributed: number
   finalGross: number
   finalNet: number
+  finalInflationAdjusted: number
   absoluteGainGross: number
   absoluteGainNet: number
+  absoluteGainInflationAdjusted: number
   percentGainGross: number
   percentGainNet: number
+  percentGainInflationAdjusted: number
 }
 
 export interface PacResult {

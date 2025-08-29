@@ -1,85 +1,182 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme {
-  --color-bg: oklch(98% 0 0);
-  --color-fg: oklch(17% 0.02 0);
-  --color-bg-muted: oklch(97% 0.01 0);
-  --color-surface: oklch(100% 0 0);
-  --color-border: oklch(92% 0.01 0);
-  --color-fg-muted: oklch(48% 0.02 0);
-  --color-accent: oklch(62% 0.18 254);
-  --color-accent-500: oklch(62% 0.18 254);
-  --color-accent-600: oklch(56% 0.18 254);
-  --color-positive: oklch(60% 0.13 150);
-  --color-negative: oklch(55% 0.17 30);
+/* Base styles e variabili CSS custom */
+:root {
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --glass-bg: rgba(255, 255, 255, 0.98);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
 }
 
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-bg: oklch(17% 0 0);
-    --color-fg: oklch(96% 0 0);
-    --color-bg-muted: oklch(23% 0.01 0);
-    --color-surface: oklch(21% 0.01 0);
-    --color-border: oklch(28% 0.02 0);
-    --color-fg-muted: oklch(72% 0.02 0);
-    --color-accent: oklch(65% 0.19 254);
-    --color-accent-500: oklch(65% 0.19 254);
-    --color-accent-600: oklch(70% 0.20 254);
-    --color-positive: oklch(78% 0.11 150);
-    --color-negative: oklch(72% 0.16 30);
-  }
+:root.dark {
+  --glass-bg: rgba(30, 41, 59, 0.98);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
 }
 
-html, body, #root {
-  height: 100%;
-}
-
-body {
-  @apply bg-[--color-bg] text-[--color-fg];
-}
-
-.container {
-  @apply max-w-5xl mx-auto px-4;
+/* Componenti custom essenziali */
+.app-background {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 0;
 }
 
 .card {
-  @apply rounded-xl border border-[--color-border] bg-[--color-surface] p-5 shadow-sm;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 .btn {
-  @apply inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-colors;
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ease-in-out;
 }
+
 .btn-primary {
-  @apply bg-[--color-accent] text-white border-[--color-accent] hover:bg-[--color-accent-600];
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:-translate-y-0.5;
 }
+
 .btn-ghost {
-  @apply border-transparent hover:bg-[--color-bg-muted];
+  @apply bg-white/10 text-gray-700 border border-white/20 hover:bg-white/20 backdrop-blur-sm;
+}
+
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed transform-none;
 }
 
 .input {
-  @apply w-full mt-1 rounded-lg border border-[--color-border] bg-[--color-surface] p-2.5 outline-none focus:ring-2 focus:ring-[--color-accent] transition;
+  @apply w-full px-4 py-3 rounded-lg border border-gray-200 bg-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
+  color: var(--text-primary);
+}
+
+.input.has-prefix {
+  padding-left: 2.5rem;
 }
 
 .label {
-  @apply block text-sm font-medium mb-1;
-}
-
-.helper {
-  @apply text-xs text-[--color-fg-muted] mt-1;
+  @apply block text-sm font-semibold mb-2;
+  color: var(--text-primary);
 }
 
 .section-title {
-  @apply text-lg font-semibold mb-2;
+  @apply text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
 }
 
 .stat {
-  @apply rounded-xl border border-[--color-border] bg-[--color-surface] p-4;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+  position: relative;
 }
+
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
 .stat-label {
-  @apply text-xs uppercase tracking-wide text-[--color-fg-muted];
+  @apply text-xs uppercase tracking-wide font-semibold mb-2;
+  color: var(--text-muted);
 }
+
 .stat-value {
-  @apply text-2xl font-semibold;
+  @apply text-2xl font-bold;
+  color: var(--text-primary);
 }
-.stat-positive { @apply text-[--color-positive]; }
-.stat-negative { @apply text-[--color-negative]; }
+
+.stat-positive { 
+  @apply text-green-600;
+}
+
+.stat-negative { 
+  @apply text-red-600;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* Dark mode adjustments */
+.dark .btn-ghost {
+  @apply text-gray-200 bg-white/5 border-white/10 hover:bg-white/10;
+}
+
+.dark .input {
+  @apply bg-gray-800 border-gray-600 text-white placeholder-gray-400;
+}
+
+.dark .label {
+  @apply text-gray-200;
+}
+
+.dark .stat-value {
+  @apply text-white;
+}
+
+.dark .stat-label {
+  @apply text-gray-400;
+}
+
+/* Range slider custom styles */
+input[type="range"] {
+  @apply h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
