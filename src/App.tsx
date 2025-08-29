@@ -52,7 +52,7 @@ function App() {
 
         {/* Footer */}
         <footer className="text-center py-8 text-sm text-white/70">
-          <p>© 2024 Simulatore PAC. Strumento educativo per la pianificazione finanziaria.</p>
+          <p>© 2025 Simulatore PAC. Strumento educativo per la pianificazione finanziaria.</p>
         </footer>
       </div>
     </div>
