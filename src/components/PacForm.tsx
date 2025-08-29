@@ -137,8 +137,8 @@ export function PacForm() {
           <div className="space-y-2">
             <label className="label">Frequenza di versamento</label>
             <select className="input" value={input.frequency} onChange={handleFrequency}>
-              <option value="monthly">📅 Mensile</option>
               <option value="biweekly">📅 Ogni due settimane</option>
+              <option value="monthly">📅 Mensile</option>
               <option value="quarterly">📅 Trimestrale</option>
             </select>
           </div>
